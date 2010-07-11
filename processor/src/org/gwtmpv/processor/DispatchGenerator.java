@@ -16,6 +16,8 @@ import joist.sourcegen.GClass;
 import joist.sourcegen.GMethod;
 
 public class DispatchGenerator {
+	
+	private static final String GWT_IS_SERIALIZABLE_CLASS_NAME = "com.google.gwt.user.client.rpc.IsSerializable";
 
 	private final ProcessingEnvironment env;
 	private final TypeElement element;
@@ -63,6 +65,11 @@ public class DispatchGenerator {
 			this.resultClass.baseClassName(genDispatch.baseResult());
 		} else {
 			this.resultClass.implementsInterface("{}.Result", dispatchBasePackage);
+		}
+		
+		if ( genDispatch.implementsIsSerializable()) {
+			this.actionClass.implementsInterface(GWT_IS_SERIALIZABLE_CLASS_NAME);
+			this.resultClass.implementsInterface(GWT_IS_SERIALIZABLE_CLASS_NAME);
 		}
 
 		PropUtil.addGenerated(this.actionClass, DispatchGenerator.class);
